@@ -5,7 +5,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "readFile": "node ./01-read-file/index.js",
-    "writeFile": "node ./02-write-file/index.js"
+    "writeFile": "node ./02-write-file/index.js",
+    "filesInFolder": "node ./03-files-in-folder/index.js",
+    "copyDirectory": "node ./04-copy-directory/index.js"
+
+
   },
   "author": "evgeniimal",
   "license": "ISC",

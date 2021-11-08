@@ -14,10 +14,6 @@ const folderPathComponents = path.join(__dirname, '/components');
 
 const readStreamTemplate = fs.createReadStream(templatePath);
 
-
-
-// const file = fs.createWriteStream('bundle.css');
-
 fs.mkdir(newFolderPath, {recursive: true}, (err) => {
     if (err) {
         throw err;
@@ -27,6 +23,8 @@ fs.mkdir(newFolderPath, {recursive: true}, (err) => {
         if (err) {
             throw err;
         }
+
+        copyFiles(folderPathAssets, newFolderPathAssets)
     });
 
     fs.readdir(stylePath, {withFileTypes: true}, (err, files) => {
@@ -100,3 +98,31 @@ fs.mkdir(newFolderPath, {recursive: true}, (err) => {
         });     
     });
 });
+
+function copyFiles(input, output) {
+    fs.readdir(input, {withFileTypes: true}, (err, files) => {
+        if (err) {
+            throw err;
+        }
+        for (let file of files) {
+            const inputPath = path.join(input, file.name);
+            const outputPath = path.join(output, file.name);
+
+            if (!file.isDirectory()) {
+                fs.copyFile(inputPath, outputPath, (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log('copied' , outputPath);
+                });
+            } else {
+                fs.mkdir(outputPath, {recursive: true}, (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                    copyFiles(inputPath, outputPath);
+                })
+            }
+        }
+    })
+}

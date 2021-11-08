@@ -3,6 +3,8 @@ const path = require('path');
 
 const templatePath = path.join(__dirname, '/template.html');
 const newFolderPath = path.join(__dirname, '/project-dist');
+const stylePath = path.join(__dirname, '/styles');
+
 const newFolderPathAssets = path.join(__dirname, '/project-dist/assets');
 
 const newFilePathStyle = path.join(__dirname, '/project-dist/style.css');
@@ -27,12 +29,32 @@ fs.mkdir(newFolderPath, {recursive: true}, (err) => {
         }
     });
 
-    fs.writeFile(newFilePathStyle, '', (err) => {
+    fs.readdir(stylePath, {withFileTypes: true}, (err, files) => {
         if (err) {
             throw err;
-        }
+        } 
+        let cssPromiseArray = [];
+        for (let file of files) {
+            const isCssFile = path.extname(file.name) === '.css';
+    
+            if (!file.isDirectory() && isCssFile) {
+                const promise = new Promise((resolve, reject) => {
+                    const readStream = fs.createReadStream(path.join(stylePath, file.name), 'utf-8');
+                    readStream.on('data', (chunk) => {
+                        resolve(chunk);
+                    });
+                });
+    
+                cssPromiseArray.push(promise);
+            }
+    
+            Promise.all(cssPromiseArray).then(cssContentArray => {
+                const writeStream = fs.createWriteStream(path.join(newFilePathStyle));
+                writeStream.write(`${cssContentArray.join('\n')}`)
+            });
+        }  
     });
-
+    
     fs.writeFile(newFilePathIndex, '', (err) => {
         if (err) {
             throw err;

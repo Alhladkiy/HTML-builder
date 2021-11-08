@@ -7,8 +7,9 @@
     "readFile": "node ./01-read-file/index.js",
     "writeFile": "node ./02-write-file/index.js",
     "filesInFolder": "node ./03-files-in-folder/index.js",
-    "copyDirectory": "node ./04-copy-directory/index.js"
-
+    "copyDirectory": "node ./04-copy-directory/index.js",
+    "mergeStyles": "node ./05-merge-styles/index.js",
+    "buildPage": "node ./06-build-page/index.js"
 
   },
   "author": "evgeniimal",
